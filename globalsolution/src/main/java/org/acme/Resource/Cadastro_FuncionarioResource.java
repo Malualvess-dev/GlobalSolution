@@ -1,33 +1,33 @@
 package org.acme.Resource;
 
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.acme.Model.Cadastro_Funcionario;
 import org.acme.Model.Cadastro_Gerente;
+import org.acme.Model.DTO.Cadastro_FuncionarioDTO;
 import org.acme.Model.DTO.Cadastro_GerenteDTO;
-import org.acme.Service.Cadastro_GerenteService;
+import org.acme.Service.Cadastro_FuncionarioService;
 
 import java.sql.SQLException;
 import java.util.List;
 
-@Path("/Gerentes")
+@Path("/Funcionarios")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-
-
-public class Cadastro_GerenteResource {
+public class Cadastro_FuncionarioResource {
     @Inject
-    Cadastro_GerenteService cadastroGerenteService;
+    Cadastro_FuncionarioService cadastroFuncionarioService;
 
-
-    //Criação de dados
+    // Inserção de dados
 
     @POST
-    public Response criar(Cadastro_GerenteDTO gerente){
+    public Response criar(Cadastro_FuncionarioDTO funcionario){
         try {
-            cadastroGerenteService.Inserir(gerente);
-            return Response.status(Response.Status.CREATED).entity("Gerente cadastrado com sucesso!!").build();
+            cadastroFuncionarioService.Inserir(funcionario);
+            return Response.status(Response.Status.CREATED).entity("Funcionaro cadastrado com sucesso!!").build();
 
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro com a base de dados").build();
@@ -42,8 +42,8 @@ public class Cadastro_GerenteResource {
     @GET
     public Response listar(){
         try{
-            List<Cadastro_Gerente> listaGerente = cadastroGerenteService.listar();
-            return  Response.status(Response.Status.OK).entity(listaGerente).build();
+            List<Cadastro_Funcionario> listaFuncionario = cadastroFuncionarioService.listar();
+            return  Response.status(Response.Status.OK).entity(listaFuncionario).build();
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro de conexão com a Base de Dados").build();
         }
@@ -52,11 +52,11 @@ public class Cadastro_GerenteResource {
     //Atualizar
 
     @PUT
-    @Path("/{id_gerente}")
-    public Response atualizar(@PathParam("id_gerente")int id_gerente, Cadastro_GerenteDTO gerente){
+    @Path("/{id_funcionario}")
+    public Response atualizar(@PathParam("id_funcionario")int id_funcionario, Cadastro_FuncionarioDTO funcionario){
         try{
-            cadastroGerenteService.AtualizarSenha(id_gerente, gerente);
-            return Response.status(Response.Status.OK).entity("Gerente com ID " + id_gerente + " sua senha foi atualizada").build();
+            cadastroFuncionarioService.AtualizarSenha(id_funcionario, funcionario);
+            return Response.status(Response.Status.OK).entity("Funcionario com ID " + id_funcionario + " sua senha foi atualizada").build();
         }catch (SQLException e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         } catch (IllegalArgumentException e){
@@ -68,11 +68,11 @@ public class Cadastro_GerenteResource {
 
 
     @DELETE
-    @Path("/{id_gerente}")
-    public Response deletar(@PathParam("id_gerente") int id_gerente){
+    @Path("/{id_funcionario}")
+    public Response deletar(@PathParam("id_funcionario") int id_funcionario){
         try {
-            cadastroGerenteService.remove(id_gerente);
-            return Response.status(Response.Status.OK).entity("Gerente removido com sucesso!!").build();
+            cadastroFuncionarioService.remove(id_funcionario);
+            return Response.status(Response.Status.OK).entity("Funcionario removido com sucesso!!").build();
         } catch (SQLException e){
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }catch (IllegalArgumentException e){
@@ -81,8 +81,4 @@ public class Cadastro_GerenteResource {
             return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
         }
     }
-
-
-
-
 }
